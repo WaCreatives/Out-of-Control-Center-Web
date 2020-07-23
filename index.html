@@ -3,76 +3,36 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | (Out of) Control Center</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <title>(Out of) Control Center</title>
+    <link rel="Control" href="favicon.ico">
   </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-mobile-warning">
-        WebGL builds are not supported on mobile devices.
-      </div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">(Out of) Control Center</div>
-      </div>
+  <body style="background:#000; color:#eee; margin:0; text-align:center; font-family:'Arial Black',Gadget,sans-serif;">
+    <div id="blackOut" style="position:absolute;left:0;right:0;top:0;bottom:0;background:#000">
+      <div id="progressBar" style="height:100%;background:#28382d"></div>
     </div>
+    <script>let _unity</script>
+    <h1>(Out of) Control Center <img onclick="_unity.SetFullscreen(1)" src="fullscreen.png" alt="Fullscreen" /></h1>
+    <canvas id="controlCanvas" style="width:1024px; height:768px; background:#111"></canvas>
+    <script src="521b70268c8fab9841964e1b75279d0c.js"></script>
     <script>
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/control.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/control.data.br",
-        frameworkUrl: buildUrl + "/control.framework.js.br",
-        codeUrl: buildUrl + "/control.wasm.br",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "WaCreatives",
-        productName: "(Out of) Control Center",
-        productVersion: "1.0",
-      };
-
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      var mobileWarning = document.querySelector("#unity-mobile-warning");
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        container.className = "unity-mobile";
-        config.devicePixelRatio = 1;
-        mobileWarning.style.display = "block";
-        setTimeout(() => {
-          mobileWarning.style.display = "none";
-        }, 5000);
-      } else {
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
-      }
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-          fullscreenButton.onclick = () => {
-            unityInstance.SetFullscreen(1);
-          };
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
+      const blackOut = document.getElementById('blackOut');
+      const progressBar = document.getElementById('progressBar');
+      createUnityInstance(document.getElementById('controlCanvas'), {
+        dataUrl: 'f03fe5653ffbfc4c013e1e6686213eac.data',
+        frameworkUrl: '5136a5c6f8d803db467442fbf3ec75fd.js',
+        codeUrl: '054649bdb9f381842922546ace064ed5.wasm',
+        streamingAssetsUrl: 'StreamingAssets',
+        companyName: 'WaCreatives',
+        productName: '(Out of) Control Center',
+        productVersion: '1.0.0',
+      }, function(progress) {
+        progressBar.style.width = 100 * progress + "%";
+      }).then(function(unity) {
+        _unity = unity;
+        blackOut.style.display = "none";
+      }).catch(function(message) {
+        blackOut.innerText = message;
+      });
     </script>
   </body>
 </html>
